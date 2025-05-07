@@ -1,0 +1,100 @@
+features,target_subtype,all_subtypes_in_group,group
+motif,IDH mutant Glioma,IDH mutant Glioma;IDH wildtype Glioma,IDH
+methyl,IDH mutant Glioma,IDH mutant Glioma;IDH wildtype Glioma,IDH
+delfi,IDH mutant Glioma,IDH mutant Glioma;IDH wildtype Glioma,IDH
+insert_size,IDH mutant Glioma,IDH mutant Glioma;IDH wildtype Glioma,IDH
+ns_peaks,IDH mutant Glioma,IDH mutant Glioma;IDH wildtype Glioma,IDH
+motif+methyl,IDH mutant Glioma,IDH mutant Glioma;IDH wildtype Glioma,IDH
+motif+methyl+delfi,IDH mutant Glioma,IDH mutant Glioma;IDH wildtype Glioma,IDH
+delfi+methyl,IDH mutant Glioma,IDH mutant Glioma;IDH wildtype Glioma,IDH
+all,IDH mutant Glioma,IDH mutant Glioma;IDH wildtype Glioma,IDH
+motif,IDH wildtype Glioma,IDH mutant Glioma;IDH wildtype Glioma,IDH
+methyl,IDH wildtype Glioma,IDH mutant Glioma;IDH wildtype Glioma,IDH
+delfi,IDH wildtype Glioma,IDH mutant Glioma;IDH wildtype Glioma,IDH
+insert_size,IDH wildtype Glioma,IDH mutant Glioma;IDH wildtype Glioma,IDH
+ns_peaks,IDH wildtype Glioma,IDH mutant Glioma;IDH wildtype Glioma,IDH
+motif+methyl,IDH wildtype Glioma,IDH mutant Glioma;IDH wildtype Glioma,IDH
+motif+methyl+delfi,IDH wildtype Glioma,IDH mutant Glioma;IDH wildtype Glioma,IDH
+delfi+methyl,IDH wildtype Glioma,IDH mutant Glioma;IDH wildtype Glioma,IDH
+all,IDH wildtype Glioma,IDH mutant Glioma;IDH wildtype Glioma,IDH
+motif,Brain metastases,Brain metastases;Hemangiopericytoma;Meningioma;Low-grade Glioneuronal,Brain cancer
+methyl,Brain metastases,Brain metastases;Hemangiopericytoma;Meningioma;Low-grade Glioneuronal,Brain cancer
+delfi,Brain metastases,Brain metastases;Hemangiopericytoma;Meningioma;Low-grade Glioneuronal,Brain cancer
+insert_size,Brain metastases,Brain metastases;Hemangiopericytoma;Meningioma;Low-grade Glioneuronal,Brain cancer
+ns_peaks,Brain metastases,Brain metastases;Hemangiopericytoma;Meningioma;Low-grade Glioneuronal,Brain cancer
+motif+methyl,Brain metastases,Brain metastases;Hemangiopericytoma;Meningioma;Low-grade Glioneuronal,Brain cancer
+motif+methyl+delfi,Brain metastases,Brain metastases;Hemangiopericytoma;Meningioma;Low-grade Glioneuronal,Brain cancer
+delfi+methyl,Brain metastases,Brain metastases;Hemangiopericytoma;Meningioma;Low-grade Glioneuronal,Brain cancer
+all,Brain metastases,Brain metastases;Hemangiopericytoma;Meningioma;Low-grade Glioneuronal,Brain cancer
+motif,Hemangiopericytoma,Brain metastases;Hemangiopericytoma;Meningioma;Low-grade Glioneuronal,Brain cancer
+methyl,Hemangiopericytoma,Brain metastases;Hemangiopericytoma;Meningioma;Low-grade Glioneuronal,Brain cancer
+delfi,Hemangiopericytoma,Brain metastases;Hemangiopericytoma;Meningioma;Low-grade Glioneuronal,Brain cancer
+insert_size,Hemangiopericytoma,Brain metastases;Hemangiopericytoma;Meningioma;Low-grade Glioneuronal,Brain cancer
+ns_peaks,Hemangiopericytoma,Brain metastases;Hemangiopericytoma;Meningioma;Low-grade Glioneuronal,Brain cancer
+motif+methyl,Hemangiopericytoma,Brain metastases;Hemangiopericytoma;Meningioma;Low-grade Glioneuronal,Brain cancer
+motif+methyl+delfi,Hemangiopericytoma,Brain metastases;Hemangiopericytoma;Meningioma;Low-grade Glioneuronal,Brain cancer
+delfi+methyl,Hemangiopericytoma,Brain metastases;Hemangiopericytoma;Meningioma;Low-grade Glioneuronal,Brain cancer
+all,Hemangiopericytoma,Brain metastases;Hemangiopericytoma;Meningioma;Low-grade Glioneuronal,Brain cancer
+motif,Meningioma,Brain metastases;Hemangiopericytoma;Meningioma;Low-grade Glioneuronal,Brain cancer
+methyl,Meningioma,Brain metastases;Hemangiopericytoma;Meningioma;Low-grade Glioneuronal,Brain cancer
+delfi,Meningioma,Brain metastases;Hemangiopericytoma;Meningioma;Low-grade Glioneuronal,Brain cancer
+insert_size,Meningioma,Brain metastases;Hemangiopericytoma;Meningioma;Low-grade Glioneuronal,Brain cancer
+ns_peaks,Meningioma,Brain metastases;Hemangiopericytoma;Meningioma;Low-grade Glioneuronal,Brain cancer
+motif+methyl,Meningioma,Brain metastases;Hemangiopericytoma;Meningioma;Low-grade Glioneuronal,Brain cancer
+motif+methyl+delfi,Meningioma,Brain metastases;Hemangiopericytoma;Meningioma;Low-grade Glioneuronal,Brain cancer
+delfi+methyl,Meningioma,Brain metastases;Hemangiopericytoma;Meningioma;Low-grade Glioneuronal,Brain cancer
+all,Meningioma,Brain metastases;Hemangiopericytoma;Meningioma;Low-grade Glioneuronal,Brain cancer
+motif,Low-grade Glioneuronal,Brain metastases;Hemangiopericytoma;Meningioma;Low-grade Glioneuronal,Brain cancer
+methyl,Low-grade Glioneuronal,Brain metastases;Hemangiopericytoma;Meningioma;Low-grade Glioneuronal,Brain cancer
+delfi,Low-grade Glioneuronal,Brain metastases;Hemangiopericytoma;Meningioma;Low-grade Glioneuronal,Brain cancer
+insert_size,Low-grade Glioneuronal,Brain metastases;Hemangiopericytoma;Meningioma;Low-grade Glioneuronal,Brain cancer
+ns_peaks,Low-grade Glioneuronal,Brain metastases;Hemangiopericytoma;Meningioma;Low-grade Glioneuronal,Brain cancer
+motif+methyl,Low-grade Glioneuronal,Brain metastases;Hemangiopericytoma;Meningioma;Low-grade Glioneuronal,Brain cancer
+motif+methyl+delfi,Low-grade Glioneuronal,Brain metastases;Hemangiopericytoma;Meningioma;Low-grade Glioneuronal,Brain cancer
+delfi+methyl,Low-grade Glioneuronal,Brain metastases;Hemangiopericytoma;Meningioma;Low-grade Glioneuronal,Brain cancer
+all,Low-grade Glioneuronal,Brain metastases;Hemangiopericytoma;Meningioma;Low-grade Glioneuronal,Brain cancer
+motif,metastatic castration resistant prostate cancer,metastatic castration resistant prostate cancer;primary prostate cancer,Prostate cancer
+methyl,metastatic castration resistant prostate cancer,metastatic castration resistant prostate cancer;primary prostate cancer,Prostate cancer
+delfi,metastatic castration resistant prostate cancer,metastatic castration resistant prostate cancer;primary prostate cancer,Prostate cancer
+insert_size,metastatic castration resistant prostate cancer,metastatic castration resistant prostate cancer;primary prostate cancer,Prostate cancer
+ns_peaks,metastatic castration resistant prostate cancer,metastatic castration resistant prostate cancer;primary prostate cancer,Prostate cancer
+motif+methyl,metastatic castration resistant prostate cancer,metastatic castration resistant prostate cancer;primary prostate cancer,Prostate cancer
+motif+methyl+delfi,metastatic castration resistant prostate cancer,metastatic castration resistant prostate cancer;primary prostate cancer,Prostate cancer
+delfi+methyl,metastatic castration resistant prostate cancer,metastatic castration resistant prostate cancer;primary prostate cancer,Prostate cancer
+all,metastatic castration resistant prostate cancer,metastatic castration resistant prostate cancer;primary prostate cancer,Prostate cancer
+motif,primary prostate cancer,metastatic castration resistant prostate cancer;primary prostate cancer,Prostate cancer
+methyl,primary prostate cancer,metastatic castration resistant prostate cancer;primary prostate cancer,Prostate cancer
+delfi,primary prostate cancer,metastatic castration resistant prostate cancer;primary prostate cancer,Prostate cancer
+insert_size,primary prostate cancer,metastatic castration resistant prostate cancer;primary prostate cancer,Prostate cancer
+ns_peaks,primary prostate cancer,metastatic castration resistant prostate cancer;primary prostate cancer,Prostate cancer
+motif+methyl,primary prostate cancer,metastatic castration resistant prostate cancer;primary prostate cancer,Prostate cancer
+motif+methyl+delfi,primary prostate cancer,metastatic castration resistant prostate cancer;primary prostate cancer,Prostate cancer
+delfi+methyl,primary prostate cancer,metastatic castration resistant prostate cancer;primary prostate cancer,Prostate cancer
+all,primary prostate cancer,metastatic castration resistant prostate cancer;primary prostate cancer,Prostate cancer
+motif,LFS Positive,LFS Positive;LFS Previvor;LFS Survivor,LFS
+methyl,LFS Positive,LFS Positive;LFS Previvor;LFS Survivor,LFS
+delfi,LFS Positive,LFS Positive;LFS Previvor;LFS Survivor,LFS
+insert_size,LFS Positive,LFS Positive;LFS Previvor;LFS Survivor,LFS
+ns_peaks,LFS Positive,LFS Positive;LFS Previvor;LFS Survivor,LFS
+motif+methyl,LFS Positive,LFS Positive;LFS Previvor;LFS Survivor,LFS
+motif+methyl+delfi,LFS Positive,LFS Positive;LFS Previvor;LFS Survivor,LFS
+delfi+methyl,LFS Positive,LFS Positive;LFS Previvor;LFS Survivor,LFS
+all,LFS Positive,LFS Positive;LFS Previvor;LFS Survivor,LFS
+motif,LFS Previvor,LFS Positive;LFS Previvor;LFS Survivor,LFS
+methyl,LFS Previvor,LFS Positive;LFS Previvor;LFS Survivor,LFS
+delfi,LFS Previvor,LFS Positive;LFS Previvor;LFS Survivor,LFS
+insert_size,LFS Previvor,LFS Positive;LFS Previvor;LFS Survivor,LFS
+ns_peaks,LFS Previvor,LFS Positive;LFS Previvor;LFS Survivor,LFS
+motif+methyl,LFS Previvor,LFS Positive;LFS Previvor;LFS Survivor,LFS
+motif+methyl+delfi,LFS Previvor,LFS Positive;LFS Previvor;LFS Survivor,LFS
+delfi+methyl,LFS Previvor,LFS Positive;LFS Previvor;LFS Survivor,LFS
+all,LFS Previvor,LFS Positive;LFS Previvor;LFS Survivor,LFS
+motif,LFS Survivor,LFS Positive;LFS Previvor;LFS Survivor,LFS
+methyl,LFS Survivor,LFS Positive;LFS Previvor;LFS Survivor,LFS
+delfi,LFS Survivor,LFS Positive;LFS Previvor;LFS Survivor,LFS
+insert_size,LFS Survivor,LFS Positive;LFS Previvor;LFS Survivor,LFS
+ns_peaks,LFS Survivor,LFS Positive;LFS Previvor;LFS Survivor,LFS
+motif+methyl,LFS Survivor,LFS Positive;LFS Previvor;LFS Survivor,LFS
+motif+methyl+delfi,LFS Survivor,LFS Positive;LFS Previvor;LFS Survivor,LFS
+delfi+methyl,LFS Survivor,LFS Positive;LFS Previvor;LFS Survivor,LFS
+all,LFS Survivor,LFS Positive;LFS Previvor;LFS Survivor,LFS

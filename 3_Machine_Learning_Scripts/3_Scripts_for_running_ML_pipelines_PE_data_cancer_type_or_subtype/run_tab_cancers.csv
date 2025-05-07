@@ -1,0 +1,118 @@
+Feature,Cancer
+motif,Brain Cancer
+methyl,Brain Cancer
+delfi,Brain Cancer
+insert_size,Brain Cancer
+ns_peaks,Brain Cancer
+motif+methyl,Brain Cancer
+motif+methyl+delfi,Brain Cancer
+delfi+methyl,Brain Cancer
+all,Brain Cancer
+motif,Head and Neck Cancer
+methyl,Head and Neck Cancer
+delfi,Head and Neck Cancer
+insert_size,Head and Neck Cancer
+ns_peaks,Head and Neck Cancer
+motif+methyl,Head and Neck Cancer
+motif+methyl+delfi,Head and Neck Cancer
+delfi+methyl,Head and Neck Cancer
+all,Head and Neck Cancer
+motif,AML
+methyl,AML
+delfi,AML
+insert_size,AML
+ns_peaks,AML
+motif+methyl,AML
+motif+methyl+delfi,AML
+delfi+methyl,AML
+all,AML
+motif,Prostate Cancer
+methyl,Prostate Cancer
+delfi,Prostate Cancer
+insert_size,Prostate Cancer
+ns_peaks,Prostate Cancer
+motif+methyl,Prostate Cancer
+motif+methyl+delfi,Prostate Cancer
+delfi+methyl,Prostate Cancer
+all,Prostate Cancer
+motif,Lung Cancer
+methyl,Lung Cancer
+delfi,Lung Cancer
+insert_size,Lung Cancer
+ns_peaks,Lung Cancer
+motif+methyl,Lung Cancer
+motif+methyl+delfi,Lung Cancer
+delfi+methyl,Lung Cancer
+all,Lung Cancer
+motif,Eye Cancer
+methyl,Eye Cancer
+delfi,Eye Cancer
+insert_size,Eye Cancer
+ns_peaks,Eye Cancer
+motif+methyl,Eye Cancer
+motif+methyl+delfi,Eye Cancer
+delfi+methyl,Eye Cancer
+all,Eye Cancer
+motif,LFS Survivor
+methyl,LFS Survivor
+delfi,LFS Survivor
+insert_size,LFS Survivor
+ns_peaks,LFS Survivor
+motif+methyl,LFS Survivor
+motif+methyl+delfi,LFS Survivor
+delfi+methyl,LFS Survivor
+all,LFS Survivor
+motif,LFS Previvor
+methyl,LFS Previvor
+delfi,LFS Previvor
+insert_size,LFS Previvor
+ns_peaks,LFS Previvor
+motif+methyl,LFS Previvor
+motif+methyl+delfi,LFS Previvor
+delfi+methyl,LFS Previvor
+all,LFS Previvor
+motif,LFS Positive
+methyl,LFS Positive
+delfi,LFS Positive
+insert_size,LFS Positive
+ns_peaks,LFS Positive
+motif+methyl,LFS Positive
+motif+methyl+delfi,LFS Positive
+delfi+methyl,LFS Positive
+all,LFS Positive
+motif,Breast Cancer
+methyl,Breast Cancer
+delfi,Breast Cancer
+insert_size,Breast Cancer
+ns_peaks,Breast Cancer
+motif+methyl,Breast Cancer
+motif+methyl+delfi,Breast Cancer
+delfi+methyl,Breast Cancer
+all,Breast Cancer
+motif,Ovarian Cancer
+methyl,Ovarian Cancer
+delfi,Ovarian Cancer
+insert_size,Ovarian Cancer
+ns_peaks,Ovarian Cancer
+motif+methyl,Ovarian Cancer
+motif+methyl+delfi,Ovarian Cancer
+delfi+methyl,Ovarian Cancer
+all,Ovarian Cancer
+motif,Melanoma
+methyl,Melanoma
+delfi,Melanoma
+insert_size,Melanoma
+ns_peaks,Melanoma
+motif+methyl,Melanoma
+motif+methyl+delfi,Melanoma
+delfi+methyl,Melanoma
+all,Melanoma
+motif,Mixed Cancer
+methyl,Mixed Cancer
+delfi,Mixed Cancer
+insert_size,Mixed Cancer
+ns_peaks,Mixed Cancer
+motif+methyl,Mixed Cancer
+motif+methyl+delfi,Mixed Cancer
+delfi+methyl,Mixed Cancer
+all,Mixed Cancer
