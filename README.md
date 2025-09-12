@@ -3,6 +3,8 @@
 ## About
 This repository houses the scripts used in the study "A pan-cancer compendium of 1,294 plasma cell-free DNA methylomes and fragmentomes." All data locations referenced by these scripts can be found in Supplementary Table 14 of the manuscript.
 
+<img width="904" height="333" alt="image" src="https://github.com/user-attachments/assets/eb46c93b-d740-4103-a463-5bd86547351e" />
+
 ## Directory overview
 - **1_Methylation_Scripts/** – generation and processing of methylation-based features
   - `R_scripts_to_process_features/` – numbered R scripts for QC, feature aggregation, batch correction, PCA/UMAP visualization and differential methylation analyses
