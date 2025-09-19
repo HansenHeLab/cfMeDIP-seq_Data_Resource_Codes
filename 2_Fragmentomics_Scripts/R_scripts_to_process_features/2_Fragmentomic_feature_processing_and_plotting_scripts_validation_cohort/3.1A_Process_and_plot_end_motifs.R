@@ -498,6 +498,38 @@ ggsave(file.path(outdir, paste0("fragment_end_contexts_dnase1l3, March 2025, upd
 
 
 
+### Get stats for caption
+
+# 1) Keep only significant rows (any stars in `annot`)
+sig <- data_stats_dnase %>%
+  filter(!is.na(annot), str_detect(annot, "\\*")) %>%
+  mutate(
+    p_fmt  = scientific(pvalue, digits = 2),
+    fc_fmt = sprintf("%.2f", foldchange)
+  ) %>% unique() 
+
+# 3) (Optional) Summary BY CANCER TYPE ----------------------------------------
+by_cancer <- sig %>%
+  arrange(cancer_type_title_case, pvalue) %>%
+  group_by(cancer_type_title_case) %>%
+  summarise(
+    line = paste0(
+      cancer_type_title_case, ": ",
+      paste0(
+        motif,
+        " (p=", p_fmt, ", FC=", fc_fmt, ")",
+        collapse = "; "
+      )
+    ),
+    .groups = "drop"
+  ) %>% unique()
+
+# Print each cancer type on its own line
+cat(paste(by_cancer$line, collapse = "\n"), "\n")
+
+
+write.csv(sig %>% arrange(cancer_type_title_case, pvalue),
+          "dnase_significant_by_cancer.csv", row.names = FALSE)
 
 
 

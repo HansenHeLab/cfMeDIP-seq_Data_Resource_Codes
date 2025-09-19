@@ -734,6 +734,7 @@ classification_df <- classification_df %>%
     Analysis = str_remove(Analysis, "_validation")
   )
 
+
 # Create unique comparisons (here we use type1 and type2 from the file names)
 comparisons_classification <- classification_df %>% select(type1, type2)
 sorted_comparisons <- t(apply(comparisons_classification, 1, function(row) sort(c(row['type1'], row['type2']))))
