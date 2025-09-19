@@ -114,6 +114,22 @@ best_model_summary <- sum_data %>%
 print("Best Model Summary:")
 print(best_model_summary)
 
+## see nuber of iterations run 
+# Example: results_df has columns Feature, cancer_type, Model, iteration
+iterations_summary <- sum_data %>%
+  group_by(feature, cancer, model) %>%
+  summarise(
+    n_iter = n(),                         # total number of iterations
+    mean_iter = mean(n_iter),             # mean (trivial here since n_iter is single)
+    median_iter = median(n_iter),
+    min_iter = min(n_iter),
+    max_iter = max(n_iter),
+    range_iter = max(n_iter) - min(n_iter),
+    .groups = "drop"
+  )
+
+print(iterations_summary)
+
 # ---------------------------
 # Summarize fold-level (iteration) data
 # ---------------------------
