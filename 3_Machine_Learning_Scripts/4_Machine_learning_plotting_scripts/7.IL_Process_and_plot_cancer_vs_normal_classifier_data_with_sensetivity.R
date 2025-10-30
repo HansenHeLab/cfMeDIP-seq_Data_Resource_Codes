@@ -233,6 +233,77 @@ create_and_save_plots <- function(data_roc, data_auc, data_cm, data_sens99, suff
   ggsave(out_file, final_fig, width = 9, height = 5)
 }
 
+
+# ---- helper: build sens@99% plot with SE/SD/CI, points for n<10, and n labels ----
+make_sens_plot <- function(points_df, palette, err = c("SE","SD","CI95"),
+                           title = "Sensitivity at 99% Specificity by Method") {
+  err <- match.arg(err)
+  
+  sum_df <- points_df %>%
+    dplyr::group_by(Metric) %>%
+    dplyr::summarise(
+      n            = sum(!is.na(sens99)),
+      mean_sens99  = mean(sens99, na.rm = TRUE),
+      sd_sens99    = sd(sens99,   na.rm = TRUE),
+      se_sens99    = sd_sens99 / sqrt(pmax(n,1)),
+      ci95_sens99  = 1.96 * se_sens99,
+      .groups = "drop"
+    ) %>%
+    dplyr::mutate(
+      err_half = dplyr::case_when(
+        err == "SE"   ~ se_sens99,
+        err == "SD"   ~ sd_sens99,
+        err == "CI95" ~ ci95_sens99
+      ),
+      ymin = pmax(0, mean_sens99 - err_half),
+      ymax = pmin(1, mean_sens99 + err_half)
+    ) %>%
+    dplyr::arrange(dplyr::desc(mean_sens99)) %>%
+    dplyr::mutate(Metric = factor(Metric, levels = Metric))
+  
+  # show points when n >= 10 (change 10 to whatever you want)
+  small_pts <- points_df %>%
+    dplyr::semi_join(
+      sum_df %>% dplyr::filter(n >= 10) %>% dplyr::select(Metric), 
+      by = "Metric"
+    ) %>%
+    dplyr::mutate(Metric = factor(Metric, levels = levels(sum_df$Metric))) %>%
+    dplyr::filter(!is.na(sens99))   # avoid "removed N rows" warnings
+  
+  lab_df <- sum_df %>%
+    dplyr::mutate(lab_y = pmin(0.98, ymax + 0.03), lab = paste0("n=", n))
+  
+  g <- ggplot(sum_df, aes(x = Metric, y = mean_sens99, fill = Metric)) +
+    geom_col(width = 0.7) +
+    geom_errorbar(aes(ymin = ymin, ymax = ymax), width = 0.2) +
+    geom_point(
+      data = small_pts, 
+      aes(x = Metric, y = sens99),   # <- add x mapping
+      inherit.aes = FALSE,
+      position = position_jitter(width = 0.25, height = 0),
+      size = 1, alpha = 0.5, color = "black"
+    ) +
+    #   geom_text(data = lab_df, aes(y = lab_y, label = lab), size = 3) +
+    scale_fill_manual(values = palette) +
+    labs(x = "Method", y = "Sensitivity at 99% Specificity", title = title) +
+    #    subtitle = "Bars = mean across CV folds; error bars = \u00B1SE; points shown when n<10") +
+    coord_cartesian(ylim = c(0, 1.02)) +
+    theme(
+      plot.title  = element_text(hjust = 0.5, size = 13),
+      axis.line   = element_line(colour = "black"),
+      panel.grid  = element_blank(),
+      panel.border= element_blank(),
+      panel.background = element_blank(),
+      legend.position  = "none",
+      axis.text.x = element_text(angle = 45, hjust = 1, size = 6),
+      axis.text.y = element_text(size = 12),
+      axis.title  = element_text(size = 13)
+    )
+  list(plot = g, summary = sum_df)
+}
+
+
+
 ########################################
 ## Outer loop: for each unique comparison
 ########################################
@@ -258,7 +329,7 @@ for (i in 1:nrow(unique_comparisons_df)) {
     data_auc <- data.frame()
     data_cm  <- data.frame()
     features_summary_all <- data.frame()
-
+    
     # NEW: container for sensitivity at 99% specificity:
     data_sens99 <- data.frame()
     # NEW: container for sensitivity at 95% specificity:
@@ -609,8 +680,27 @@ for (i in 1:nrow(unique_comparisons_df)) {
       paste0("classification_details_", type1, "_vs_", type2, "_", current_cohort, ".csv")
     )
     write.csv(classification_details_all, classification_details_output_file, row.names = FALSE)
-    
+
     create_and_save_plots(data_roc, data_auc, data_cm, data_sens99, suffix, current_cohort, type1, type2, features_summary_all)
+    
+    ## Now the new sens plot
+    sens_out <- make_sens_plot(
+      points_df = sens99_points_all,
+      palette   = my_color_palette,
+      err       = "SD"   # or "SD" / "CI95"
+    )
+    
+    sens99_plot <- sens_out$plot
+    # optional: write tidy summary with n, mean, SE, etc.
+    readr::write_csv(
+      sens_out$summary,
+      file.path(path, paste0("Sens99_summary_tidy_", type1, "_vs_", type2, "_", current_cohort, ".csv"))
+    )
+    
+    ggsave(
+      file.path(path, paste0("Sens99_plot_", type1, "_vs_", type2, "_", suffix, "_", current_cohort, ".pdf")),
+      sens99_plot, width = 5, height = 5
+    )
     
   }  # End inner cohort loop.
   
@@ -643,6 +733,7 @@ classification_df <- classification_df %>%
     Cohort = ifelse(str_detect(Analysis, "validation"), "Validation", "Original"),
     Analysis = str_remove(Analysis, "_validation")
   )
+
 
 # Create unique comparisons (here we use type1 and type2 from the file names)
 comparisons_classification <- classification_df %>% select(type1, type2)
@@ -679,6 +770,12 @@ group1_samples <- setdiff(unique(actual_class_probs$sample), lfs_samples$sample)
 type1 <- unique_comparisons_df$type1[1]
 type2 <- unique_comparisons_df$type2[1]
 
+# ── make sure type1=cancer and type2=healthy ──
+    if (type1 == "healthy" && type2 != "healthy") {
+        tmp   <- type1
+        type1 <- type2
+        type2 <- tmp
+      }  # now type1 is always the cancer class
 # Filter classification_df to only Validation files for this comparison
 # Construct the regex pattern
 regex_pattern <- paste0(type1, "_vs_", type2, "|", type2, "_vs_", type1)
@@ -712,6 +809,9 @@ val_classification_details_group1 <- data.frame()
 
 val_data_sens95_group1 <- data.frame()
 val_data_sens90_group1 <- data.frame()
+
+val_sens99_points_group1 <- tibble()
+val_sens99_points_group2 <- tibble()
 
 
 for (j in seq_along(filenames)) {
@@ -795,26 +895,48 @@ for (j in seq_along(filenames)) {
   val_features_summary_group1 <- rbind(val_features_summary_group1, as.data.frame(features_summary_fold))
   
   # Compute ROC & AUC per fold
- # data$ActualClass_numeric <- ifelse(data$ActualClass == type2, 0, 1)
-  data$ActualClass_numeric <- ifelse(data$ActualClass == type1, 1, 0)
-  auc_per_fold <- data %>% group_by(Fold) %>%
-    summarise(auc = if (length(unique(ActualClass)) < 2) NA_real_ else as.numeric(auc(ifelse(ActualClass == type1, 1, 0), prob_cancer)))
+  # data$ActualClass_numeric <- ifelse(data$ActualClass == type2, 0, 1)
+  roc_list <- lapply(unique(data$Fold), function(fold_i) {
+    fd <- filter(data, Fold==fold_i)
+    if (length(unique(fd$ActualClass)) < 2) return(NULL)
+    roc(
+      response  = fd$ActualClass,        # factor: levels = c("healthy","cancer")
+      predictor = fd$prob_cancer,        # your cancer‐probability
+      levels    = c(type2, type1),       # c("healthy","cancer")
+      direction = "<",                    # healthy < cancer
+      quiet     = TRUE
+    )
+  })
+  # drop any NULLs
+  roc_list <- roc_list[ !sapply(roc_list, is.null) ]
   
-  mean_auc_val <- mean(auc_per_fold$auc, na.rm = TRUE)
-  sd_auc_val <- sd(auc_per_fold$auc, na.rm = TRUE)
-  min_auc_val <- min(auc_per_fold$auc, na.rm = TRUE)
-  max_auc_val <- max(auc_per_fold$auc, na.rm = TRUE)
+  ## ----- Extract AUC from those same ROC objects -----
+  auc_per_fold <- sapply(roc_list, function(r) as.numeric(pROC::auc(r)))
+  
+  mean_auc_val <- mean(auc_per_fold, na.rm = TRUE)
+  sd_auc_val <- sd(auc_per_fold, na.rm = TRUE)
+  min_auc_val <- min(auc_per_fold, na.rm = TRUE)
+  max_auc_val <- max(auc_per_fold, na.rm = TRUE)
   auc_df <- data.frame(Metric = analysis, mean_auc = mean_auc_val, sd_auc = sd_auc_val,
                        min_auc = min_auc_val, max_auc = max_auc_val)
   val_data_auc_group1 <- rbind(val_data_auc_group1, auc_df)
   
   # Compute ROC for each fold
   roc_list <- lapply(unique(data$Fold), function(fold) {
-    fold_data <- data %>% filter(Fold == fold)
-    fold_data$ActualClass_numeric <- ifelse(fold_data$ActualClass == type2, 0, 1)
-    if (length(unique(fold_data$ActualClass_numeric)) < 2) return(NULL)
-    roc(fold_data$ActualClass_numeric, fold_data$prob_cancer)
+    fd <- data[data$Fold == fold, ]
+    # skip folds with only one class
+    if (length(unique(fd$ActualClass)) < 2) return(NULL)
+    roc(
+      response  = fd$ActualClass,      # factor: levels = c(type2, type1)
+      predictor = fd[[type1]],         # probability of “cancer”
+      levels    = c(type2, type1),     # healthy first, cancer second
+      direction = "<",                 # healthy < cancer
+      quiet     = TRUE
+    )
   })
+  # drop any NULLs
+  roc_list <- Filter(Negate(is.null), roc_list)
+  
   roc_list <- roc_list[!sapply(roc_list, is.null)]
   common_fpr <- seq(0, 1, length.out = 100)
   if (length(roc_list) == 0) {
@@ -840,9 +962,29 @@ for (j in seq_along(filenames)) {
   val_data_roc_group1 <- rbind(val_data_roc_group1, roc_df)
   
   # Compute sensitivity at 99% specificity per fold
-  sens_at_99_per_fold <- sapply(roc_list, function(roc_obj) {
-    as.numeric(coords(roc_obj, x = 0.99, input = "specificity", ret = "sensitivity", transpose = FALSE))[1]
-  })
+  sens_at_99_per_fold <- vapply(roc_list, function(r) {
+    as.numeric(
+      coords(
+        r,
+        x         = 0.99,
+        input     = "specificity",
+        ret       = "sensitivity",
+        transpose = FALSE
+      )[1]
+    )
+  }, numeric(1))
+  
+  val_sens99_points_group1 <- dplyr::bind_rows(
+    val_sens99_points_group1,
+    tibble(
+      Metric = analysis,
+      sens99 = as.numeric(sens_at_99_per_fold),
+      Fold   = names(sens_at_99_per_fold),
+      File   = basename(file),
+      Cohort = "Validation-Group1"
+    )
+  )
+  
   mean_sens99 <- mean(sens_at_99_per_fold, na.rm = TRUE)
   sd_sens99 <- sd(sens_at_99_per_fold, na.rm = TRUE)
   sens99_df <- data.frame(Metric = analysis, mean_sens99 = mean_sens99, sd_sens99 = sd_sens99)
@@ -925,19 +1067,28 @@ val_classification_details_group2 <- data.frame()
 val_data_sens95_group2 <- data.frame()
 val_data_sens90_group2 <- data.frame()
 
+
 for (j in seq_along(filenames)) {
   file <- filenames[[j]]
+  # Only proceed if the file's short name is in our filtered list
   if (!(basename(file) %in% filenames_short)) next
+  
   analysis <- filtered_analyses[filenames_short == basename(file)][1]
   
+  # Read in the file and "unwrap" it
   data_obj <- readRDS(file)
   data_list <- lapply(data_obj, function(x) {
-    if (is.data.frame(x)) { list(x) }
-    else if (is.list(x) && length(x)==1 && is.data.frame(x[[1]])) { x }
-    else if (is.list(x) && length(x)==1 && is.list(x[[1]]) && length(x[[1]])==1 && is.data.frame(x[[1]][[1]])) { x[[1]] }
-    else { x }
+    if (is.data.frame(x)) {
+      list(x)
+    } else if (is.list(x) && length(x)==1 && is.data.frame(x[[1]])) {
+      x
+    } else if (is.list(x) && length(x)==1 && is.list(x[[1]]) && length(x[[1]])==1 && is.data.frame(x[[1]][[1]])) {
+      x[[1]]
+    } else {
+      x
+    }
   })
-  if (!is.list(data_list)) stop("Not structured as list of folds.")
+  if (!is.list(data_list)) stop("File not structured as list of folds.")
   fold_names <- names(data_list)
   if (is.null(fold_names)) fold_names <- paste0("Fold_", seq_along(data_list))
   data_list <- lapply(seq_along(data_list), function(i) {
@@ -954,30 +1105,38 @@ for (j in seq_along(filenames)) {
   })
   data <- bind_rows(data_list)
   
+  # Rename column if needed
   if ("Predicted" %in% colnames(data)) {
     data <- data %>% rename(PredictedClass = Predicted)
   }
   
+  # Clean sample names
   data$sample <- data$sample %>% str_remove("_motifs$") %>% str_remove("_peak_distance$") %>% str_remove("_dedup$")
   
+  # Join with actual_class_probs if ActualClass is missing
   actual_class_probs <- actual_class_probs %>% mutate(sample = str_remove(sample_id, "_dedup$"))
   if (!"ActualClass" %in% colnames(data)) {
     data <- data %>% left_join(actual_class_probs %>% select(sample, CN_classifier) %>% rename(ActualClass = CN_classifier), by = "sample")
   }
   
+  # Set factor levels for classes
   data$ActualClass <- factor(data$ActualClass, levels = c(type1, type2))
   data$PredictedClass <- factor(data$PredictedClass, levels = c(type1, type2))
   
-  # Subset to group2 samples (Validation samples in group2_samples)
+  # Subset to group2 samples
   data <- data %>% filter(sample %in% group2_samples)
-  if(nrow(data)==0) next
+  if(nrow(data) == 0) next  # skip file if no group2 samples remain
   
-  data$prob_cancer <- ifelse(data$PredictedClass == type1, data[[type1]], 1 - data[[type2]])
+  # Create probability column
+  #data$prob_cancer <- ifelse(data$PredictedClass == type1, data[[type1]], 1 - data[[type2]])
+  data$prob_cancer <- data[[type1]]
   
+  # Collect per-sample classification details
   classification_details <- data %>% select(sample, ActualClass, PredictedClass, prob_cancer) %>%
     mutate(Analysis = analysis, File = basename(file), Cohort = "Validation")
   val_classification_details_group2 <- rbind(val_classification_details_group2, classification_details)
   
+  # Feature summary per fold
   features_summary_fold <- data %>% group_by(Fold) %>%
     summarise(
       !!paste0("mean_", type1) := mean(.data[[type1]], na.rm = TRUE),
@@ -989,36 +1148,61 @@ for (j in seq_along(filenames)) {
     ) %>% mutate(Analysis = analysis, File = basename(file), Cohort = "Validation")
   val_features_summary_group2 <- rbind(val_features_summary_group2, as.data.frame(features_summary_fold))
   
-  data$ActualClass_numeric <- ifelse(data$ActualClass == type2, 0, 1)
-  auc_per_fold <- data %>% group_by(Fold) %>%
-    summarise(auc = if (length(unique(ActualClass)) < 2) NA_real_ else as.numeric(auc(ifelse(ActualClass == type1, 1, 0), prob_cancer)))
+  # Compute ROC & AUC per fold
+  # data$ActualClass_numeric <- ifelse(data$ActualClass == type2, 0, 1)
+  roc_list <- lapply(unique(data$Fold), function(fold_i) {
+    fd <- filter(data, Fold==fold_i)
+    if (length(unique(fd$ActualClass)) < 2) return(NULL)
+    roc(
+      response  = fd$ActualClass,        # factor: levels = c("healthy","cancer")
+      predictor = fd$prob_cancer,        # your cancer‐probability
+      levels    = c(type2, type1),       # c("healthy","cancer")
+      direction = "<",                    # healthy < cancer
+      quiet     = TRUE
+    )
+  })
+  # drop any NULLs
+  roc_list <- roc_list[ !sapply(roc_list, is.null) ]
   
-  mean_auc_val <- mean(auc_per_fold$auc, na.rm = TRUE)
-  sd_auc_val <- sd(auc_per_fold$auc, na.rm = TRUE)
-  min_auc_val <- min(auc_per_fold$auc, na.rm = TRUE)
-  max_auc_val <- max(auc_per_fold$auc, na.rm = TRUE)
+  ## ----- Extract AUC from those same ROC objects -----
+  auc_per_fold <- sapply(roc_list, function(r) as.numeric(pROC::auc(r)))
+  
+  mean_auc_val <- mean(auc_per_fold, na.rm = TRUE)
+  sd_auc_val <- sd(auc_per_fold, na.rm = TRUE)
+  min_auc_val <- min(auc_per_fold, na.rm = TRUE)
+  max_auc_val <- max(auc_per_fold, na.rm = TRUE)
   auc_df <- data.frame(Metric = analysis, mean_auc = mean_auc_val, sd_auc = sd_auc_val,
                        min_auc = min_auc_val, max_auc = max_auc_val)
   val_data_auc_group2 <- rbind(val_data_auc_group2, auc_df)
   
+  # Compute ROC for each fold
   roc_list <- lapply(unique(data$Fold), function(fold) {
-    fold_data <- data %>% filter(Fold == fold)
-    fold_data$ActualClass_numeric <- ifelse(fold_data$ActualClass == type2, 0, 1)
-    if(length(unique(fold_data$ActualClass_numeric)) < 2) return(NULL)
-    roc(fold_data$ActualClass_numeric, fold_data$prob_cancer)
+    fd <- data[data$Fold == fold, ]
+    # skip folds with only one class
+    if (length(unique(fd$ActualClass)) < 2) return(NULL)
+    roc(
+      response  = fd$ActualClass,      # factor: levels = c(type2, type1)
+      predictor = fd[[type1]],         # probability of “cancer”
+      levels    = c(type2, type1),     # healthy first, cancer second
+      direction = "<",                 # healthy < cancer
+      quiet     = TRUE
+    )
   })
+  # drop any NULLs
+  roc_list <- Filter(Negate(is.null), roc_list)
+  
   roc_list <- roc_list[!sapply(roc_list, is.null)]
   common_fpr <- seq(0, 1, length.out = 100)
-  if(length(roc_list) == 0){
+  if (length(roc_list) == 0) {
     mean_tpr <- rep(NA, length(common_fpr))
     sd_tpr <- rep(NA, length(common_fpr))
   } else {
-    tpr_matrix <- vapply(roc_list, function(roc_obj){
+    tpr_matrix <- vapply(roc_list, function(roc_obj) {
       fold_fpr <- 1 - roc_obj$specificities
       fold_tpr <- roc_obj$sensitivities
       as.numeric(approx(x = fold_fpr, y = fold_tpr, xout = common_fpr, rule = 2)$y)
     }, FUN.VALUE = numeric(length(common_fpr)))
-    if(is.null(dim(tpr_matrix))) tpr_matrix <- matrix(tpr_matrix, ncol = 1)
+    if (is.null(dim(tpr_matrix))) tpr_matrix <- matrix(tpr_matrix, ncol = 1)
     mean_tpr <- rowMeans(tpr_matrix, na.rm = TRUE)
     sd_tpr <- apply(tpr_matrix, 1, sd, na.rm = TRUE)
   }
@@ -1031,19 +1215,71 @@ for (j in seq_along(filenames)) {
                        Metric = analysis)
   val_data_roc_group2 <- rbind(val_data_roc_group2, roc_df)
   
-  sens_at_99_per_fold <- sapply(roc_list, function(roc_obj) {
-    as.numeric(coords(roc_obj, x = 0.99, input = "specificity", ret = "sensitivity", transpose = FALSE))[1]
-  })
+  # Compute sensitivity at 99% specificity per fold
+  sens_at_99_per_fold <- vapply(roc_list, function(r) {
+    as.numeric(
+      coords(
+        r,
+        x         = 0.99,
+        input     = "specificity",
+        ret       = "sensitivity",
+        transpose = FALSE
+      )[1]
+    )
+  }, numeric(1))
+  
+  val_sens99_points_group2 <- dplyr::bind_rows(
+    val_sens99_points_group2,
+    tibble(
+      Metric = analysis,
+      sens99 = as.numeric(sens_at_99_per_fold),
+      Fold   = names(sens_at_99_per_fold),
+      File   = basename(file),
+      Cohort = "Validation-Group2"
+    )
+  )
+  
   mean_sens99 <- mean(sens_at_99_per_fold, na.rm = TRUE)
   sd_sens99 <- sd(sens_at_99_per_fold, na.rm = TRUE)
   sens99_df <- data.frame(Metric = analysis, mean_sens99 = mean_sens99, sd_sens99 = sd_sens99)
   val_data_sens99_group2 <- rbind(val_data_sens99_group2, sens99_df)
   
+  # ----- Compute sensitivity at 95% specificity -----
+  sens_at_95_per_fold <- sapply(roc_list, function(roc_obj) {
+    as.numeric(coords(roc_obj,
+                      x         = 0.95,
+                      input     = "specificity",
+                      ret       = "sensitivity",
+                      transpose = FALSE))[1]
+  })
+  mean_sens95 <- mean(sens_at_95_per_fold, na.rm = TRUE)
+  sd_sens95   <- sd(sens_at_95_per_fold, na.rm = TRUE)
+  sens95_df   <- data.frame(Metric = analysis,
+                            mean_sens95 = mean_sens95,
+                            sd_sens95   = sd_sens95)
+  val_data_sens95_group2 <- rbind(val_data_sens95_group2, sens95_df)
+  
+  # ----- Compute sensitivity at 90% specificity -----
+  sens_at_90_per_fold <- sapply(roc_list, function(roc_obj) {
+    as.numeric(coords(roc_obj,
+                      x         = 0.90,
+                      input     = "specificity",
+                      ret       = "sensitivity",
+                      transpose = FALSE))[1]
+  })
+  mean_sens90 <- mean(sens_at_90_per_fold, na.rm = TRUE)
+  sd_sens90   <- sd(sens_at_90_per_fold, na.rm = TRUE)
+  sens90_df   <- data.frame(Metric = analysis,
+                            mean_sens90 = mean_sens90,
+                            sd_sens90   = sd_sens90)
+  val_data_sens90_group2 <- rbind(val_data_sens90_group2, sens90_df)
+  
+  # Compute confusion matrix metrics per fold
   cm_per_fold <- data %>% group_by(Fold) %>%
     do({
       fold_data <- .
       fold_data$ActualClass_numeric <- ifelse(fold_data$ActualClass == type2, 0, 1)
-      if(length(unique(fold_data$ActualClass_numeric)) < 2) {
+      if (length(unique(fold_data$ActualClass_numeric)) < 2) {
         return(data.frame(sensitivity = NA, specificity = NA))
       }
       fold_data$prob_cancer <- as.numeric(fold_data$prob_cancer)
@@ -1068,7 +1304,8 @@ for (j in seq_along(filenames)) {
                       sd_specificity = sd_specificity)
   val_data_cm_group2 <- rbind(val_data_cm_group2, cm_df)
   
-}  # End for loop for group2
+}  # End for loop over files for group2
+
 
 # ---------------------------
 # PRINT RESULTS FOR DEBUGGING
@@ -1089,7 +1326,6 @@ print("Group1 Sens99:")
 print(val_data_sens99_group1)
 print("Group2 Sens99:")
 print(val_data_sens99_group2)
-
 
 ##############################
 # GENERATE PLOTS FOR EACH GROUP
@@ -1345,6 +1581,36 @@ val_data_roc_group2$Metric <- factor(val_data_roc_group2$Metric, levels = unique
   ggsave(file.path(path, paste0("classifier_performance_", type1, "_vs_", type2, "_Group2.pdf")),
          final_fig_group2, width = 9, height = 5)
 }
+
+## New Sens 
+## New sens plot 
+## Group 1 
+val_sens99_points_group1$Metric <- factor(
+  val_sens99_points_group1$Metric,
+  levels = unique_metrics_group1,
+  labels = get_labels(unique_metrics_group1)
+)
+
+sens_out_g1 <- make_sens_plot(val_sens99_points_group1, my_color_palette, err = "SD")
+sens99_plot_group1 <- sens_out_g1$plot
+readr::write_csv(sens_out_g1$summary,
+                 file.path(path, paste0("Sens99_summary_tidy_", type1, "_vs_", type2, "_Group1.csv")))
+ggsave(file.path(path, paste0("Sens99_plot_", type1, "_vs_", type2, "_Group1.pdf")),
+       sens99_plot_group1, width = 5, height = 5)
+
+### Group 2
+val_sens99_points_group2$Metric <- factor(
+  val_sens99_points_group2$Metric,
+  levels = unique_metrics_group2,
+  labels = get_labels(unique_metrics_group2)
+)
+
+sens_out_g2 <- make_sens_plot(val_sens99_points_group2, my_color_palette, err = "SD")
+sens99_plot_group2 <- sens_out_g2$plot
+readr::write_csv(sens_out_g2$summary,
+                 file.path(path, paste0("Sens99_summary_tidy_", type1, "_vs_", type2, "_Group2.csv")))
+ggsave(file.path(path, paste0("Sens99_plot_", type1, "_vs_", type2, "_Group2.pdf")),
+       sens99_plot_group2, width = 5, height = 5)
 
 ##############################
 # (Optional) PRINT RESULTS FOR DEBUGGING

@@ -1,3 +1,33 @@
+# ----------------------------------------------------------------------------
+# Title   : Fragmentation Signature Analysis of cfDNA Insert Sizes
+# Author  : Dory Abelman, with support from Althaf 
+# Date    : December 2024
+#
+# Purpose :
+#   • Load and clean TCGE cfDNA metadata and insert-size matrix.
+#   • Normalize fragment-length counts and partition samples into
+#       – Healthy (training/testing)
+#       – Cancer (training/testing)
+#       – Li-Fraumeni syndrome (LFS) subsets.
+#   • Perform non-negative matrix factorization (NMF) to extract
+#     genome-wide fragment-length signatures (normal vs cancer).
+#   • Compute patient-level fragmentation scores (FS) and compare to
+#     Vessies reference fragmentation profiles.
+#   • Generate and save figures:
+#       – NMF signature profiles
+#       – Signature ratio vs. reference curves
+#       – Boxplots of FS across cancer types, healthy, and LFS groups
+#       – Combined multi-panel figure and legends.
+#   • Save all intermediate R objects (RDS) and final plots (PNG/PDF).
+#
+# Notes  :
+#   – Uses tidyverse for data wrangling, caret for train/test splits,
+#     and NMF for signature extraction.
+#   – Input: metadata_updated_Dec2024.csv and insert_matrix_df_for_Althaf_updated.rds
+#   – Output: RDS files of training/testing sets, NMF results,
+#     patient-level FS tables, and multiple publication-ready plots.
+# ----------------------------------------------------------------------------
+
 set.seed(12345)
 library(tidyverse)
 library(tidyr)
