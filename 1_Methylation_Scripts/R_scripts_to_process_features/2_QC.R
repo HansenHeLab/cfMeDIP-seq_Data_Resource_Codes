@@ -1,3 +1,11 @@
+# ==============================================================================
+# Purpose: 2 QC
+# Inputs: Intermediate files and metadata referenced by this script.
+# Outputs: Script-specific tables/plots/model objects written to configured output paths.
+# How to run: Rscript 1_Methylation_Scripts/R_scripts_to_process_features/2_QC.R
+# Key parameters: Input/output path variables and optional commandArgs() inputs defined in the script.
+# Dependencies: R plus packages loaded via library()/require() in this script.
+# ==============================================================================
 rm(list = ls())
 setwd("/Users/yong/OneDrive_UHN/Projects/TCGE/cfEpigenomics/Resource/1_QC/1_QC_cutoffs_for_revision")
 

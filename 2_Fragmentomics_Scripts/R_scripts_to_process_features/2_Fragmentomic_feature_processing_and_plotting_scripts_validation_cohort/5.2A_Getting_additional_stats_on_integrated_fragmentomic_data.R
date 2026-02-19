@@ -1,3 +1,11 @@
+# ==============================================================================
+# Purpose: 5 2A Getting additional stats on integrated fragmentomic data
+# Inputs: Intermediate files and metadata referenced by this script.
+# Outputs: Script-specific tables/plots/model objects written to configured output paths.
+# How to run: Rscript 2_Fragmentomics_Scripts/R_scripts_to_process_features/2_Fragmentomic_feature_processing_and_plotting_scripts_validation_cohort/5.2A_Getting_additional_stats_on_integrated_fragmentomic_data.R
+# Key parameters: Input/output path variables and optional commandArgs() inputs defined in the script.
+# Dependencies: R plus packages loaded via library()/require() in this script.
+# ==============================================================================
 # Additional stats on merged zscore df - June 2024 
 library(tidyverse)
 

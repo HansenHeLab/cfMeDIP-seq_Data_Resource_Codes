@@ -1,3 +1,11 @@
+# ==============================================================================
+# Purpose: 5 2 Getting additional stats on integrated fragmentomic data
+# Inputs: Intermediate files and metadata referenced by this script.
+# Outputs: Script-specific tables/plots/model objects written to configured output paths.
+# How to run: Rscript 2_Fragmentomics_Scripts/R_scripts_to_process_features/1_Fragmentomic_feature_processing_and_plotting_scripts/5.2_Getting_additional_stats_on_integrated_fragmentomic_data.R
+# Key parameters: Input/output path variables and optional commandArgs() inputs defined in the script.
+# Dependencies: R plus packages loaded via library()/require() in this script.
+# ==============================================================================
 # ----------------------------------------------------------------------------
 # Title   : Additional Summary Statistics for Merged Z‑Score Data
 # Author  : Dory Abelman

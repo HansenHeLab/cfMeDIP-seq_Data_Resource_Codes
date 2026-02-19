@@ -1,3 +1,11 @@
+# ==============================================================================
+# Purpose: 7 IJ Process and plot cancer vs normal classifier data with sensetivity SE
+# Inputs: Intermediate files and metadata referenced by this script.
+# Outputs: Script-specific tables/plots/model objects written to configured output paths.
+# How to run: Rscript 3_Machine_Learning_Scripts/4_Machine_learning_plotting_scripts/7.IJ_Process_and_plot_cancer_vs_normal_classifier_data_with_sensetivity_SE.R
+# Key parameters: Input/output path variables and optional commandArgs() inputs defined in the script.
+# Dependencies: R plus packages loaded via library()/require() in this script.
+# ==============================================================================
 # ----------------------------------------------------------------------------
 # Title   : Classifier Performance Analysis for Cancer vs. Normal (SE Data)
 # Author  : Dory Abelman

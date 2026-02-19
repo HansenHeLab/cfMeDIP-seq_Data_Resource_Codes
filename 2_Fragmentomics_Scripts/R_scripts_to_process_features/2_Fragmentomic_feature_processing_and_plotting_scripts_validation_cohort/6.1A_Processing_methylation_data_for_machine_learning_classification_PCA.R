@@ -1,3 +1,11 @@
+# ==============================================================================
+# Purpose: 6 1A Processing methylation data for machine learning classification PCA
+# Inputs: Intermediate files and metadata referenced by this script.
+# Outputs: Script-specific tables/plots/model objects written to configured output paths.
+# How to run: Rscript 2_Fragmentomics_Scripts/R_scripts_to_process_features/2_Fragmentomic_feature_processing_and_plotting_scripts_validation_cohort/6.1A_Processing_methylation_data_for_machine_learning_classification_PCA.R
+# Key parameters: Input/output path variables and optional commandArgs() inputs defined in the script.
+# Dependencies: R plus packages loaded via library()/require() in this script.
+# ==============================================================================
 ## Running classifier on Yong's methylation signature 
 
 ## Load RDS file for paired end samples

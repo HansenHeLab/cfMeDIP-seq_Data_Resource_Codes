@@ -1,3 +1,11 @@
+# ==============================================================================
+# Purpose: 4 1A Process and plot nucelosome peak distances
+# Inputs: Intermediate files and metadata referenced by this script.
+# Outputs: Script-specific tables/plots/model objects written to configured output paths.
+# How to run: Rscript 2_Fragmentomics_Scripts/R_scripts_to_process_features/2_Fragmentomic_feature_processing_and_plotting_scripts_validation_cohort/4.1A_Process_and_plot_nucelosome_peak_distances.R
+# Key parameters: Input/output path variables and optional commandArgs() inputs defined in the script.
+# Dependencies: R plus packages loaded via library()/require() in this script.
+# ==============================================================================
 # Process and plot nucleosome peak distances
 
 # authors: Dory Abelman and Derek Wong

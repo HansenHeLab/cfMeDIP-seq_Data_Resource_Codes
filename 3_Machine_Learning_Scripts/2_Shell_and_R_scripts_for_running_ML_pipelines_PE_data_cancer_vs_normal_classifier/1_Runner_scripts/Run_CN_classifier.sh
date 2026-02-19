@@ -1,12 +1,27 @@
 #!/bin/bash
+# ==============================================================================
+# Purpose: Run CN classifier
+# Inputs: Intermediate files and metadata referenced by this script.
+# Outputs: Script-specific tables/plots/model objects written to configured output paths.
+# How to run: bash 3_Machine_Learning_Scripts/2_Shell_and_R_scripts_for_running_ML_pipelines_PE_data_cancer_vs_normal_classifier/1_Runner_scripts/Run_CN_classifier.sh
+# Key parameters: Path variables and scheduler/resource settings near the top of the script.
+# Dependencies: bash, scheduler (SBATCH/SGE as configured), and command-line tools/modules referenced in script.
+# ==============================================================================
 
 # Define cancer types
 declare -a types=("healthy" "cancer")
 
 # Paths
-config_file="/cluster/projects/tcge/cell_free_epigenomics/processed_data/fragmentomics_dory/Run2/Machine_Learning/January_2025/Machine_learning_config_combined_CN_classifier_Jan2025.csv"
-output_dir="/cluster/projects/tcge/cell_free_epigenomics/processed_data/fragmentomics_dory/Run2/Machine_Learning/January_2025/output_scripts_CN_classifier_update2"
-slurm_dir="/cluster/projects/tcge/cell_free_epigenomics/processed_data/fragmentomics_dory/Run2/Machine_Learning/January_2025/slurm_outputs_CN_classifier_update2"
+config_file="${CFMEDIP_CN_CONFIG:-/cluster/projects/tcge/cell_free_epigenomics/processed_data/fragmentomics_dory/Run2/Machine_Learning/January_2025/Machine_learning_config_combined_CN_classifier_Jan2025.csv}"
+output_dir="${CFMEDIP_CN_OUTPUT_DIR:-/cluster/projects/tcge/cell_free_epigenomics/processed_data/fragmentomics_dory/Run2/Machine_Learning/January_2025/output_scripts_CN_classifier_update2}"
+slurm_dir="${CFMEDIP_CN_SLURM_DIR:-/cluster/projects/tcge/cell_free_epigenomics/processed_data/fragmentomics_dory/Run2/Machine_Learning/January_2025/slurm_outputs_CN_classifier_update2}"
+runner_script="${CFMEDIP_CN_RUNNER_SCRIPT:-/cluster/projects/tcge/cell_free_epigenomics/processed_data/fragmentomics_dory/Run2/Machine_Learning/January_2025/Scripts/Runner_fragmentation_Cancer_vs_normal.R}"
+r_module="${CFMEDIP_R_MODULE:-R/4.1}"
+
+if [[ ! -f "$config_file" ]]; then
+  echo "ERROR: Config file not found: $config_file"
+  exit 1
+fi
 
 # Create directories if they do not exist
 mkdir -p "$output_dir"
@@ -50,9 +65,9 @@ trim() {
 #SBATCH -c 2
 #SBATCH --mem=16G
 
-module load R/4.1
+module load ${r_module}
 
-Rscript /cluster/projects/tcge/cell_free_epigenomics/processed_data/fragmentomics_dory/Run2/Machine_Learning/January_2025/Scripts/Runner_fragmentation_Cancer_vs_normal.R \\
+Rscript "${runner_script}" \\
   "${technology_name}" \\
   "${input_data}" \\
   "${metadata}" \\

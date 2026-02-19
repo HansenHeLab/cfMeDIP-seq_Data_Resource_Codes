@@ -317,7 +317,24 @@ grids = {
     'lda': lda_grid
     }
 
-main_dir = '/.mounts/labs/PCSI/users/yfang/misc_projects/cfMEDIP/ML'
+if len(sys.argv) != 3:
+    raise SystemExit(
+        "Usage: python cancer_origin_clf.py <feature> <cancer_type>"
+    )
+
+requested_models = os.environ.get("CFMEDIP_MODELS", "").strip()
+if requested_models:
+    model_names = [m.strip() for m in requested_models.split(",") if m.strip()]
+    unknown_models = [m for m in model_names if m not in classifiers]
+    if unknown_models:
+        raise ValueError(f"Unknown model(s) in CFMEDIP_MODELS: {unknown_models}")
+    classifiers = {k: classifiers[k] for k in model_names}
+    grids = {'pca': grids['pca'], **{k: grids[k] for k in model_names}}
+
+main_dir = os.environ.get(
+    "CFMEDIP_MAIN_DIR",
+    '/.mounts/labs/PCSI/users/yfang/misc_projects/cfMEDIP/ML'
+)
 
 meta_data = pd.read_csv(f'{main_dir}/data/metadata_df.csv')
 # remove normal samples and the HCC project, and use PE samples only
@@ -413,5 +430,6 @@ for clf in classifiers.keys():
     print('$'*100)
     print(len(roc_data_sum))
 
+os.makedirs(f'{main_dir}/results_cancers', exist_ok=True)
 sum_tab.to_csv(f'{main_dir}/results_cancers/{cancer}+{feature}.sum.csv', index = False)
 roc_data_sum.to_csv(f'{main_dir}/results_cancers/{cancer}+{feature}.roc.csv', index = False)

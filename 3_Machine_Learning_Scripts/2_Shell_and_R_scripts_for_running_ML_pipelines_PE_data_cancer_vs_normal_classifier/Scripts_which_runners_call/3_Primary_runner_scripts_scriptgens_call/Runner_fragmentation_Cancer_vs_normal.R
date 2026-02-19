@@ -1,3 +1,11 @@
+# ==============================================================================
+# Purpose: Runner fragmentation Cancer vs normal
+# Inputs: Intermediate files and metadata referenced by this script.
+# Outputs: Script-specific tables/plots/model objects written to configured output paths.
+# How to run: Rscript 3_Machine_Learning_Scripts/2_Shell_and_R_scripts_for_running_ML_pipelines_PE_data_cancer_vs_normal_classifier/Scripts_which_runners_call/3_Primary_runner_scripts_scriptgens_call/Runner_fragmentation_Cancer_vs_normal.R
+# Key parameters: Input/output path variables and optional commandArgs() inputs defined in the script.
+# Dependencies: R plus packages loaded via library()/require() in this script.
+# ==============================================================================
 # runner 
 # for cluster
 library(caret)
@@ -8,6 +16,13 @@ library(doParallel)
 
 ### Set variables
 args <- commandArgs(trailingOnly = TRUE)
+if (length(args) < 10) {
+  stop(paste(
+    "Usage: Rscript Runner_fragmentation_Cancer_vs_normal.R",
+    "<technology_name> <input_data.rds> <metadata.rds> <outdir>",
+    "<title> <title2> <sample_id_column> <type1> <type2> <external_data.rds|path>"
+  ))
+}
 technology_name <- args[1]
 input_data <- args[2]
 metadata_file <- args[3]
@@ -18,7 +33,10 @@ sample_id_column <- args[7]
 type1 <- args[8]
 type2 <- args[9]
 external_data_file <- args[10] # e.g., "/path/to/external_validation_data.rds"
-scripts <- "/cluster/projects/tcge/cell_free_epigenomics/processed_data/fragmentomics_dory/Run2/Machine_Learning/January_2025/Scripts"
+scripts <- Sys.getenv(
+  "CFMEDIP_CN_SCRIPTS_DIR",
+  unset = "/cluster/projects/tcge/cell_free_epigenomics/processed_data/fragmentomics_dory/Run2/Machine_Learning/January_2025/Scripts"
+)
 
 ### Import data (Starting with the 5Mb ratios), from the delfi ratio script
 data <- readRDS(file = input_data)

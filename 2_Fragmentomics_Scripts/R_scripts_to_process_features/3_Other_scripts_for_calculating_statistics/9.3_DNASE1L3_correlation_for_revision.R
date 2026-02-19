@@ -1,3 +1,11 @@
+# ==============================================================================
+# Purpose: 9 3 DNASE1L3 correlation for revision
+# Inputs: Intermediate files and metadata referenced by this script.
+# Outputs: Script-specific tables/plots/model objects written to configured output paths.
+# How to run: Rscript 2_Fragmentomics_Scripts/R_scripts_to_process_features/3_Other_scripts_for_calculating_statistics/9.3_DNASE1L3_correlation_for_revision.R
+# Key parameters: Input/output path variables and optional commandArgs() inputs defined in the script.
+# Dependencies: R plus packages loaded via library()/require() in this script.
+# ==============================================================================
 # ----------------------------------------------------------------------------
 # Title   : Correlation of DNASE1L3 Motif Changes with Fragmentation Score
 # Authors : Dory Abelman

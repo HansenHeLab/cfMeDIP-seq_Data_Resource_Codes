@@ -1,3 +1,11 @@
+# ==============================================================================
+# Purpose: 3 1A Process and plot end motifs
+# Inputs: Intermediate files and metadata referenced by this script.
+# Outputs: Script-specific tables/plots/model objects written to configured output paths.
+# How to run: Rscript 2_Fragmentomics_Scripts/R_scripts_to_process_features/2_Fragmentomic_feature_processing_and_plotting_scripts_validation_cohort/3.1A_Process_and_plot_end_motifs.R
+# Key parameters: Input/output path variables and optional commandArgs() inputs defined in the script.
+# Dependencies: R plus packages loaded via library()/require() in this script.
+# ==============================================================================
 # End motifs - heatmaps, plots and stats
 
 # author: Dory Abelman and Derek Wong

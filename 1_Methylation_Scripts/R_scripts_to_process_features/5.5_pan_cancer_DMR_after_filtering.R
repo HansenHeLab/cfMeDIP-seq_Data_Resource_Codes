@@ -1,3 +1,11 @@
+# ==============================================================================
+# Purpose: 5 5 pan cancer DMR after filtering
+# Inputs: Intermediate files and metadata referenced by this script.
+# Outputs: Script-specific tables/plots/model objects written to configured output paths.
+# How to run: Rscript 1_Methylation_Scripts/R_scripts_to_process_features/5.5_pan_cancer_DMR_after_filtering.R
+# Key parameters: Input/output path variables and optional commandArgs() inputs defined in the script.
+# Dependencies: R plus packages loaded via library()/require() in this script.
+# ==============================================================================
 rm(list = ls())
 setwd("/Users/yong/OneDrive - UHN/Projects/TCGE/cfEpigenomics/Resource/2_batch_norm/DMRs_revision/SE_vs_PE_after_filtering")
 

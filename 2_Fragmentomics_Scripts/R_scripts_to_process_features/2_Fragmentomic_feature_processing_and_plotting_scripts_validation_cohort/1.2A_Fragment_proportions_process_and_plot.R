@@ -1,3 +1,11 @@
+# ==============================================================================
+# Purpose: 1 2A Fragment proportions process and plot
+# Inputs: Intermediate files and metadata referenced by this script.
+# Outputs: Script-specific tables/plots/model objects written to configured output paths.
+# How to run: Rscript 2_Fragmentomics_Scripts/R_scripts_to_process_features/2_Fragmentomic_feature_processing_and_plotting_scripts_validation_cohort/1.2A_Fragment_proportions_process_and_plot.R
+# Key parameters: Input/output path variables and optional commandArgs() inputs defined in the script.
+# Dependencies: R plus packages loaded via library()/require() in this script.
+# ==============================================================================
 # Delfi medians - 5Mb - heatmaps
 
 # author: Dory Abelman

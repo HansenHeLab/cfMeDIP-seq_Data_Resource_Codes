@@ -1,4 +1,12 @@
 #!/bin/bash
+# ==============================================================================
+# Purpose: 1 sbatch methylation analysis
+# Inputs: Intermediate files and metadata referenced by this script.
+# Outputs: Script-specific tables/plots/model objects written to configured output paths.
+# How to run: bash 1_Methylation_Scripts/Shell_scripts_to_generate_features/1_sbatch_methylation_analysis.sh
+# Key parameters: Path variables and scheduler/resource settings near the top of the script.
+# Dependencies: bash, scheduler (SBATCH/SGE as configured), and command-line tools/modules referenced in script.
+# ==============================================================================
 #SBATCH -p veryhimem
 #SBATCH --mem=800G
 #SBATCH -t 5-00:00:00

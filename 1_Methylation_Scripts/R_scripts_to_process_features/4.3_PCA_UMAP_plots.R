@@ -1,3 +1,11 @@
+# ==============================================================================
+# Purpose: 4 3 PCA UMAP plots
+# Inputs: Intermediate files and metadata referenced by this script.
+# Outputs: Script-specific tables/plots/model objects written to configured output paths.
+# How to run: Rscript 1_Methylation_Scripts/R_scripts_to_process_features/4.3_PCA_UMAP_plots.R
+# Key parameters: Input/output path variables and optional commandArgs() inputs defined in the script.
+# Dependencies: R plus packages loaded via library()/require() in this script.
+# ==============================================================================
 rm(list = ls())
 library(ggfortify)   ## PCA plot: autoplot
 library(umap)

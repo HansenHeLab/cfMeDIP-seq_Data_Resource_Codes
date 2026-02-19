@@ -1,3 +1,11 @@
+# ==============================================================================
+# Purpose: 5 1 Integrate and plot zscores from different fragmentomic features
+# Inputs: Intermediate files and metadata referenced by this script.
+# Outputs: Script-specific tables/plots/model objects written to configured output paths.
+# How to run: Rscript 2_Fragmentomics_Scripts/R_scripts_to_process_features/1_Fragmentomic_feature_processing_and_plotting_scripts/5.1_Integrate_and_plot_zscores_from_different_fragmentomic_features.R
+# Key parameters: Input/output path variables and optional commandArgs() inputs defined in the script.
+# Dependencies: R plus packages loaded via library()/require() in this script.
+# ==============================================================================
 # ----------------------------------------------------------------------------
 # Title   : Unified Fragmentation Metrics – Heatmap & Correlation Analysis
 # Author  : Dory Abelman

@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
+# ==============================================================================
+# Purpose: 3 run sbatch end motifs
+# Inputs: Intermediate files and metadata referenced by this script.
+# Outputs: Script-specific tables/plots/model objects written to configured output paths.
+# How to run: bash 2_Fragmentomics_Scripts/Shell_scripts_to_generate_features_from_bams/1_Runner_scripts/3_run_sbatch_end_motifs.sh
+# Key parameters: Path variables and scheduler/resource settings near the top of the script.
+# Dependencies: bash, scheduler (SBATCH/SGE as configured), and command-line tools/modules referenced in script.
+# ==============================================================================
 #$ -S /bin/bash
 #$ -cwd
 

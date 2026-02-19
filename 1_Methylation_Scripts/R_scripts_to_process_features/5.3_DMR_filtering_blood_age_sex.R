@@ -1,3 +1,11 @@
+# ==============================================================================
+# Purpose: 5 3 DMR filtering blood age sex
+# Inputs: Intermediate files and metadata referenced by this script.
+# Outputs: Script-specific tables/plots/model objects written to configured output paths.
+# How to run: Rscript 1_Methylation_Scripts/R_scripts_to_process_features/5.3_DMR_filtering_blood_age_sex.R
+# Key parameters: Input/output path variables and optional commandArgs() inputs defined in the script.
+# Dependencies: R plus packages loaded via library()/require() in this script.
+# ==============================================================================
 rm(list = ls())
 setwd("/Users/yong/Library/CloudStorage/OneDrive-UHN/Projects/TCGE/cfEpigenomics/Resource/2_batch_norm/DMRs_revision/DMR_filtering")
 

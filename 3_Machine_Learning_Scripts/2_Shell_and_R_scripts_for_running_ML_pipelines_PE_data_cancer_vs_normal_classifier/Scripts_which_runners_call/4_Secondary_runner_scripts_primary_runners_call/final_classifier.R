@@ -1,3 +1,11 @@
+# ==============================================================================
+# Purpose: final classifier
+# Inputs: Intermediate files and metadata referenced by this script.
+# Outputs: Script-specific tables/plots/model objects written to configured output paths.
+# How to run: Source from Runner_fragmentation_Cancer_vs_normal.R (not typically run standalone).
+# Key parameters: Input/output path variables and optional commandArgs() inputs defined in the script.
+# Dependencies: R plus packages loaded via library()/require() in this script.
+# ==============================================================================
 ################################################################################
 # final_classifier.R
 #

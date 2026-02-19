@@ -1,3 +1,11 @@
+# ==============================================================================
+# Purpose: 10 4 See if cohorts are consistent
+# Inputs: Intermediate files and metadata referenced by this script.
+# Outputs: Script-specific tables/plots/model objects written to configured output paths.
+# How to run: Rscript 2_Fragmentomics_Scripts/R_scripts_to_process_features/3_Other_scripts_for_calculating_statistics/10.4_See_if_cohorts_are_consistent.R
+# Key parameters: Input/output path variables and optional commandArgs() inputs defined in the script.
+# Dependencies: R plus packages loaded via library()/require() in this script.
+# ==============================================================================
 # ----------------------------------------------------------------------------
 # Title   : Compare End‑Motif Profiles Between PE and SE Samples via MANOVA
 # Authors : Dory Abelman

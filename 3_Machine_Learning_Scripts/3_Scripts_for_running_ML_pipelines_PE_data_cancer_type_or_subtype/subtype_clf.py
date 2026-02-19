@@ -1,3 +1,11 @@
+# ==============================================================================
+# Purpose: subtype clf
+# Inputs: Intermediate files and metadata referenced by this script.
+# Outputs: Script-specific tables/plots/model objects written to configured output paths.
+# How to run: python 3_Machine_Learning_Scripts/3_Scripts_for_running_ML_pipelines_PE_data_cancer_type_or_subtype/subtype_clf.py <args>
+# Key parameters: CLI positional arguments and optional environment variables (for example CFMEDIP_MAIN_DIR, CFMEDIP_MODELS).
+# Dependencies: Python 3 with packages listed in requirements.txt.
+# ==============================================================================
 """
 File:        subtype_clf.py
 Author:      Yuanchang Fang
@@ -268,7 +276,24 @@ grids = {
     'lda': lda_grid
     }
 
-main_dir = '/.mounts/labs/PCSI/users/yfang/misc_projects/cfMEDIP/ML'
+if len(sys.argv) != 4:
+    raise SystemExit(
+        "Usage: python subtype_clf.py <target_subtype> <subtype1;subtype2;...> <feature>"
+    )
+
+requested_models = os.environ.get("CFMEDIP_MODELS", "").strip()
+if requested_models:
+    model_names = [m.strip() for m in requested_models.split(",") if m.strip()]
+    unknown_models = [m for m in model_names if m not in classifiers]
+    if unknown_models:
+        raise ValueError(f"Unknown model(s) in CFMEDIP_MODELS: {unknown_models}")
+    classifiers = {k: classifiers[k] for k in model_names}
+    grids = {'pca': grids['pca'], **{k: grids[k] for k in model_names}}
+
+main_dir = os.environ.get(
+    "CFMEDIP_MAIN_DIR",
+    '/.mounts/labs/PCSI/users/yfang/misc_projects/cfMEDIP/ML'
+)
 # main_dir = '/Users/yf/Data/UT/Notta/cfMEDIP/ML/'
 
 meta_data = pd.read_csv(f'{main_dir}/data/metadata_df.csv')
@@ -384,5 +409,6 @@ for clf in classifiers.keys():
     print('$'*100)
     print(len(roc_data_sum))
 
+os.makedirs(f'{main_dir}/results_subtypes', exist_ok=True)
 sum_tab.to_csv(f'{main_dir}/results_subtypes/{subtype}+{feature}.sum.csv', index = False)
 roc_data_sum.to_csv(f'{main_dir}/results_subtypes/{subtype}+{feature}.roc.csv', index = False)

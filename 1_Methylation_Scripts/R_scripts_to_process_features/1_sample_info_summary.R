@@ -1,3 +1,11 @@
+# ==============================================================================
+# Purpose: 1 sample info summary
+# Inputs: Intermediate files and metadata referenced by this script.
+# Outputs: Script-specific tables/plots/model objects written to configured output paths.
+# How to run: Rscript 1_Methylation_Scripts/R_scripts_to_process_features/1_sample_info_summary.R
+# Key parameters: Input/output path variables and optional commandArgs() inputs defined in the script.
+# Dependencies: R plus packages loaded via library()/require() in this script.
+# ==============================================================================
 rm(list = ls())
 setwd("/Users/yong/OneDrive - UHN/Projects/TCGE/cfEpigenomics/Resource/0_sample_meta_info/meta_info_summary_for_revision")
 
